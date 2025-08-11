@@ -302,6 +302,22 @@ async function run() {
 			}
 		});
 
+		app.get("/sessions/:id", async (req, res) => {
+			try {
+				const sessionId = req.params.id;
+				const session = await sessionsCollection.findOne({
+					_id: new ObjectId(sessionId),
+					status: "published",
+				});
+				if (!session) {
+					return res.status(404).json({ message: "Session not found" });
+				}
+				res.json(session);
+			} catch (error) {
+				res.status(500).json({ message: "Failed to fetch session" });
+			}
+		});
+
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
 		console.log("Pinged your deployment. You successfully connected to MongoDB!");

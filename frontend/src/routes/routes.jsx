@@ -8,6 +8,7 @@ import DashboardHome from "../pages/Dashboard/DashboardHome";
 import MySessions from "../pages/Dashboard/MySessions";
 import SessionEditor from "../pages/Dashboard/SessionEditor";
 import Sessions from "../pages/Sessions/Sessions";
+import SessionDetails from "../pages/Sessions/SessionDetails";
 import axios from "axios";
 
 const router = createBrowserRouter([
@@ -26,9 +27,14 @@ const router = createBrowserRouter([
 					const res = await axios.get("http://localhost:5000/sessions");
 					return res.data;
 				},
-				HydrateFallbackElement: <div>
-					<span className="loading loading-bars"></span>
-				</div>
+			},
+			{
+				path: "/sessions/:id",
+				Component: SessionDetails,
+				loader: async ({ params }) => {
+					const res = await axios.get(`http://localhost:5000/sessions/${params.id}`);
+					return res.data;
+				},
 			},
 			{
 				path: "/login",
@@ -56,7 +62,10 @@ const router = createBrowserRouter([
 				path: "session-editor",
 				Component: SessionEditor,
 			},
-			{ path: "session-editor/:id", Component: SessionEditor },
+			{
+				path: "session-editor/:id",
+				Component: SessionEditor,
+			},
 		],
 	},
 ]);
