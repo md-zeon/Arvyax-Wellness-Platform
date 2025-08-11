@@ -15,7 +15,7 @@ const Login = () => {
 						</div>
 					</div>
 
-					<h1 className='text-3xl font-bold text-center text-gray-900'>Login to your account</h1>
+					<h1 className='text-3xl font-bold text-center '>Login to your account</h1>
 					{/* Login Form */}
 					<LoginForm />
 					<p className='text-sm text-center text-gray-600'>

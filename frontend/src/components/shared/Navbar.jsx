@@ -1,6 +1,7 @@
 import { FaBars } from "react-icons/fa6";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
+import ThemeToggle from "./ThemeToggle";
 const Navbar = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Navbar = () => {
 		<>
 			<li>
 				<NavLink
-					className='text-black font-medium hover:text-primary hover:bg-transparent'
+					className='font-medium hover:text-primary hover:bg-transparent'
 					to='/'
 				>
 					Home
@@ -29,7 +30,7 @@ const Navbar = () => {
 			</li>
 			<li>
 				<NavLink
-					className='text-black font-medium hover:text-primary hover:bg-transparent'
+					className='font-medium hover:text-primary hover:bg-transparent'
 					to='/sessions'
 				>
 					Sessions
@@ -38,7 +39,7 @@ const Navbar = () => {
 			{isLoggedIn && (
 				<li>
 					<NavLink
-						className='text-black font-medium hover:text-primary hover:bg-transparent'
+						className='font-medium hover:text-primary hover:bg-transparent'
 						to='/dashboard'
 					>
 						Dashboard
@@ -78,6 +79,7 @@ const Navbar = () => {
 				<ul className='menu menu-horizontal px-1'>{navItems}</ul>
 			</div>
 			<div className='navbar-end gap-2'>
+				<ThemeToggle />
 				{isLoggedIn ? (
 					<button
 						onClick={handleLogout}

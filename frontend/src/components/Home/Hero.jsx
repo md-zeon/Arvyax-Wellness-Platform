@@ -8,7 +8,7 @@ const Hero = () => {
 					<h1 className='text-primary text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold leading-tight mb-6'>
 						Find Your Inner Peace
 					</h1>
-					<p className='text-base-200 text-lg sm:text-xl mb-8 drop-shadow-md max-w-xl mx-auto'>
+					<p className='text-gray-300 text-lg sm:text-xl mb-8 drop-shadow-md max-w-xl mx-auto'>
 						Join our community of wellness enthusiasts and embark on a journey of self-discovery and tranquility.
 					</p>
 					<Link

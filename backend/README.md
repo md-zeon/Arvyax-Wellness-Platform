@@ -1,83 +1,66 @@
-# Backend - Arvyax Wellness Platform
+# Arvyax Wellness Platform - Backend
 
-This directory contains the Node.js, Express, and MongoDB backend server for the Arvyax Wellness Platform.
+This directory contains the backend server for the Arvyax Wellness Platform. It is a Node.js application built with the Express.js framework and uses MongoDB as its database.
 
 ## Tech Stack
 
-- **Node.js**
-- **Express.js**
-- **MongoDB** (via `mongodb` driver)
-- **JSON Web Tokens (JWT)** for authentication
-- **bcryptjs** for password hashing
+*   **Node.js**: A JavaScript runtime environment.
+*   **Express.js**: A web application framework for Node.js.
+*   **MongoDB**: A NoSQL database.
+*   **jsonwebtoken**: For generating and verifying JSON Web Tokens.
+*   **bcryptjs**: For hashing passwords.
+*   **cors**: For enabling Cross-Origin Resource Sharing.
+*   **dotenv**: For loading environment variables from a `.env` file.
 
----
+## Features
 
-## Setup and Running
+*   **RESTful API:** A complete API for managing users and wellness sessions.
+*   **Authentication:** Secure user authentication using JSON Web Tokens (JWT).
+*   **Password Hashing:** Passwords are securely hashed using `bcryptjs` before being stored in the database.
+*   **Middleware:** Includes middleware for verifying JWT tokens to protect routes.
+
+## Getting Started
 
 ### Prerequisites
 
--   Node.js and npm installed.
--   A MongoDB database (local or a cloud service like MongoDB Atlas).
+*   Node.js and npm
+*   MongoDB instance (local or cloud)
 
-### Instructions
+### Installation and Setup
 
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend
-    ```
-
-2.  **Install dependencies:**
+1.  Install dependencies:
     ```bash
     npm install
     ```
-
-3.  **Create an environment file:**
-    Create a file named `.env` in this directory by copying the example:
+2.  Create a `.env` file by copying the example:
     ```bash
     cp .env.example .env
     ```
-
-4.  **Configure environment variables:**
-    Open the `.env` file and add your specific configurations:
-    ```
-    MONGODB_URI="your_mongodb_connection_string"
-    JWT_SECRET="your_strong_jwt_secret"
-    PORT=5000
-    ```
-
-5.  **Start the server:**
+3.  Update the `.env` file with your environment variables (see below).
+4.  Start the server:
     ```bash
     npm start
     ```
-    The backend server will be running on `http://localhost:5000`.
 
----
+The server will be running on the port specified in your `.env` file (defaults to 5000).
 
 ## API Documentation
 
-The base URL for the API is `http://localhost:5000`.
+| Method | Endpoint                   | Description                                         | Authentication |
+| ------ | -------------------------- | --------------------------------------------------- | -------------- |
+| POST   | `/register`                | Register a new user.                                | Public         |
+| POST   | `/login`                   | Login a user and get a JWT token.                   | Public         |
+| GET    | `/user/:id`                | Get user information by ID.                         | Required       |
+| GET    | `/sessions`                | Get all published sessions.                         | Public         |
+| GET    | `/my-sessions`             | Get all sessions for the logged-in user.            | Required       |
+| GET    | `/my-sessions/:id`         | Get a single session by ID for the logged-in user.  | Required       |
+| POST   | `/my-sessions/save-draft`  | Save or update a session as a draft.                | Required       |
+| POST   | `/my-sessions/publish`     | Publish a session.                                  | Required       |
+| DELETE | `/my-sessions/:id`         | Delete a session by ID.                             | Required       |
+| GET    | `/sessions/:id`            | Get a single published session by ID.               | Public         |
 
-### Auth Routes
+## Environment Variables
 
-| Method | Endpoint     | Description                  | Protected |
-| :----- | :----------- | :--------------------------- | :-------- |
-| `POST` | `/register`  | Registers a new user.        | No        |
-| `POST` | `/login`     | Logs in a user, returns JWT. | No        |
-
-### Session Routes
-
-| Method   | Endpoint              | Description                                       | Protected |
-| :------- | :-------------------- | :------------------------------------------------ | :-------- |
-| `GET`    | `/sessions`           | Get all **published** wellness sessions.          | No        |
-| `GET`    | `/sessions/:id`       | Get a single published session by its ID.         | No        |
-| `GET`    | `/my-sessions`        | Get all sessions (drafts & published) for the logged-in user. | Yes       |
-| `GET`    | `/my-sessions/:id`    | Get a single session by ID for the logged-in user. | Yes       |
-| `POST`   | `/my-sessions/save-draft` | Create or update a session as a draft.        | Yes       |
-| `POST`   | `/my-sessions/publish`| Publish a draft session.                          | Yes       |
-| `DELETE` | `/my-sessions/:id`    | Delete a session owned by the logged-in user.     | Yes       |
-
-### User Routes
-
-| Method | Endpoint  | Description                                  | Protected |
-| :----- | :-------- | :------------------------------------------- | :-------- |
-| `GET`  | `/user/:id` | Get a user's public information by their ID. | Yes       |
+*   `MONGODB_URI`: Your MongoDB connection string.
+*   `JWT_SECRET`: A secret key for signing JWT tokens.
+*   `PORT`: The port for the server to run on (e.g., 5000).

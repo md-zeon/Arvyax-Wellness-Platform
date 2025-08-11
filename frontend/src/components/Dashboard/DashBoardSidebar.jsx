@@ -13,9 +13,9 @@ const DashBoardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 			></div>
 
 			<aside
-				className={`fixed top-0 left-0 bottom-0 w-64 bg-base-200 text-base-content p-5 z-40 transform transition-transform ${
+				className={`lg:sticky lg:top-0 lg:h-screen w-64 bg-base-200 text-base-content p-5 z-40 transform transition-transform ${
 					sidebarOpen ? "translate-x-0" : "-translate-x-full"
-				} lg:translate-x-0 lg:static lg:flex-shrink-0 flex flex-col`}
+				} lg:translate-x-0 lg:flex-shrink-0 flex flex-col overflow-y-auto`}
 			>
 				<div className='flex items-center justify-between mb-6'>
 					<Link

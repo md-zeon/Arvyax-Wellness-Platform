@@ -15,7 +15,7 @@ const Register = () => {
 						</div>
 					</div>
 
-					<h1 className='text-3xl font-bold text-center text-gray-900'>Create a new account</h1>
+					<h1 className='text-3xl font-bold text-center '>Create a new account</h1>
 
 					{/* Register Form */}
 					<RegisterForm />

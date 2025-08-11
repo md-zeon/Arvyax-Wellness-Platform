@@ -15,7 +15,7 @@ const Sessions = () => {
 						className='card bg-base-100 shadow-lg'
 					>
 						<div className='card-body flex flex-col'>
-							<h3 className='card-title text-gray-900'>{session.title}</h3>
+							<h3 className='card-title '>{session.title}</h3>
 							{session.tags?.length > 0 && (
 								<div className='mb-4 flex flex-wrap gap-2'>
 									{session.tags.map((tag) => (
