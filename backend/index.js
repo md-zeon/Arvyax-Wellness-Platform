@@ -190,7 +190,7 @@ async function run() {
 				if (!title) {
 					return res.status(400).json({ message: "Title is required" });
 				}
-				
+
 				// Check for existing session with same title (case-insensitive)
 				const existingSession = await sessionsCollection.findOne({
 					user_id: new ObjectId(userId),
@@ -243,6 +243,26 @@ async function run() {
 					return res.status(400).json({ message: "Session ID is required" });
 				}
 
+				const session = await sessionsCollection.findOne({
+					_id: new ObjectId(sessionId),
+					user_id: new ObjectId(userId),
+				});
+
+				if (!session) {
+					return res.status(404).json({ message: "Session not found or you are not the owner" });
+				}
+
+				// Check for other sessions with same title (exclude current session)
+				const duplicate = await sessionsCollection.findOne({
+					user_id: new ObjectId(userId),
+					title: { $regex: new RegExp(`^${session.title.trim()}$`, "i") },
+					_id: { $ne: new ObjectId(sessionId) },
+				});
+
+				if (duplicate) {
+					return res.status(400).json({ message: "You already have a session with this title" });
+				}
+
 				// Update session status to published
 				const result = await sessionsCollection.updateOne(
 					{ _id: new ObjectId(sessionId), user_id: new ObjectId(userId) },
@@ -255,6 +275,7 @@ async function run() {
 
 				res.json({ message: "Session published successfully" });
 			} catch (err) {
+				console.error(err);
 				res.status(500).json({ message: "Failed to publish session" });
 			}
 		});
