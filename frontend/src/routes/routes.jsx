@@ -7,6 +7,8 @@ import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
 import MySessions from "../pages/Dashboard/MySessions";
 import SessionEditor from "../pages/Dashboard/SessionEditor";
+import Sessions from "../pages/Sessions/Sessions";
+import axios from "axios";
 
 const router = createBrowserRouter([
 	{
@@ -16,6 +18,17 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				Component: Home,
+			},
+			{
+				path: "/sessions",
+				Component: Sessions,
+				loader: async () => {
+					const res = await axios.get("http://localhost:5000/sessions");
+					return res.data;
+				},
+				HydrateFallbackElement: <div>
+					<span className="loading loading-bars"></span>
+				</div>
 			},
 			{
 				path: "/login",
