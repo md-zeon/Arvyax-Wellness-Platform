@@ -190,6 +190,17 @@ async function run() {
 				if (!title) {
 					return res.status(400).json({ message: "Title is required" });
 				}
+				
+				// Check for existing session with same title (case-insensitive)
+				const existingSession = await sessionsCollection.findOne({
+					user_id: new ObjectId(userId),
+					title: { $regex: new RegExp(`^${title.trim()}$`, "i") }, // case-insensitive exact match
+					...(_id ? { _id: { $ne: new ObjectId(_id) } } : {}), // exclude current session if updating
+				});
+
+				if (existingSession) {
+					return res.status(400).json({ message: "You already have a session with this title" });
+				}
 
 				const sessionData = {
 					user_id: new ObjectId(userId),
@@ -217,6 +228,7 @@ async function run() {
 					res.json({ message: "Draft saved successfully", sessionId: result.insertedId });
 				}
 			} catch (err) {
+				console.error(err);
 				res.status(500).json({ message: "Failed to save draft" });
 			}
 		});

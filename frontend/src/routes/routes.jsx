@@ -43,6 +43,7 @@ const router = createBrowserRouter([
 				path: "session-editor",
 				Component: SessionEditor,
 			},
+			{ path: "session-editor/:id", Component: SessionEditor },
 		],
 	},
 ]);
