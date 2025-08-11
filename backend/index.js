@@ -4,6 +4,7 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = express();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // Middleware
 app.use(cors());
@@ -33,7 +34,6 @@ function verifyJWT(req, res, next) {
 
 const PORT = process.env.PORT || 5000;
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = process.env.MONGODB_URI;
 if (!uri) {
 	console.error("MONGODB_URI is not defined in .env file");
@@ -117,6 +117,21 @@ async function run() {
 					name: user.name,
 					email: user.email,
 				});
+			} catch (error) {
+				console.error(error);
+				res.status(500).json({ message: "Server error" });
+			}
+		});
+
+		// Get user info by ID
+		app.get("/user/:id", verifyJWT, async (req, res) => {
+			try {
+				const userId = req.params.id;
+				const user = await usersCollection.findOne({ _id: new ObjectId(userId) }, { projection: { password: 0 } });
+				if (!user) {
+					return res.status(404).json({ message: "User not found" });
+				}
+				res.json(user);
 			} catch (error) {
 				console.error(error);
 				res.status(500).json({ message: "Server error" });
