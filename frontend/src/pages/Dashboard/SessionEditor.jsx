@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
@@ -14,9 +14,11 @@ const SessionEditor = () => {
 	const [loading, setLoading] = useState(false);
 	const [sessionId, setSessionId] = useState(null);
 
+	// Ref to store the debounce timer
+	const saveTimer = useRef(null);
+
 	useEffect(() => {
 		if (id) {
-			// Fetch session data for editing
 			axiosSecure
 				.get(`/my-sessions/${id}`)
 				.then(({ data }) => {
@@ -27,7 +29,42 @@ const SessionEditor = () => {
 				})
 				.catch(() => toast.error("Failed to load session"));
 		}
-	}, [id, axiosSecure]);
+	}, [id]);
+
+	const saveDraft = async (showToast = true) => {
+		if (!title.trim()) return; // Don't save empty title
+
+		const sessionData = {
+			title,
+			tags: tags
+				.split(",")
+				.map((tag) => tag.trim())
+				.filter(Boolean),
+			json_file_url: jsonUrl,
+			status: "draft",
+		};
+
+		if (sessionId) sessionData._id = sessionId;
+
+		try {
+			const res = await axiosSecure.post("/my-sessions/save-draft", sessionData);
+			if (!sessionId && res.data.sessionId) {
+				setSessionId(res.data.sessionId);
+			}
+			if (showToast) toast.success("Draft auto-saved");
+		} catch {
+			toast.error("Auto-save failed");
+		}
+	};
+
+	// Auto-save when fields change
+	useEffect(() => {
+		if (saveTimer.current) clearTimeout(saveTimer.current);
+		saveTimer.current = setTimeout(() => {
+			saveDraft(true);
+		}, 5000); // Auto-save after 5s of inactivity
+		return () => clearTimeout(saveTimer.current);
+	}, [title, tags, jsonUrl]);
 
 	const handleSave = async (status) => {
 		if (!title.trim()) {
@@ -51,23 +88,14 @@ const SessionEditor = () => {
 
 		try {
 			if (status === "draft") {
-				// Save or update draft
-				const res = await axiosSecure.post("/my-sessions/save-draft", sessionData);
-				if (!sessionId && res.data.sessionId) {
-					setSessionId(res.data.sessionId);
-				}
+				await saveDraft(false);
 				toast.success("Session saved as draft");
 			} else {
-				// Publish flow
 				if (!sessionId) {
-					// Save draft first to get sessionId
 					const res = await axiosSecure.post("/my-sessions/save-draft", sessionData);
-					if (!res.data.sessionId) {
-						throw new Error("Failed to get session ID from draft save");
-					}
+					if (!res.data.sessionId) throw new Error("Failed to get session ID from draft save");
 					setSessionId(res.data.sessionId);
 					sessionData._id = res.data.sessionId;
-					toast.success("Session saved as draft before publishing");
 				}
 				await axiosSecure.post("/my-sessions/publish", { sessionId: sessionId || sessionData._id });
 				toast.success("Session published");

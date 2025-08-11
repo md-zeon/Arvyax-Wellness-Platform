@@ -20,7 +20,7 @@ const MySessions = () => {
 				toast.error("Failed to fetch your sessions");
 				setLoading(false);
 			});
-	}, [axiosSecure]);
+	}, []);
 
 	const handleDelete = async (id) => {
 		const result = await Swal.fire({

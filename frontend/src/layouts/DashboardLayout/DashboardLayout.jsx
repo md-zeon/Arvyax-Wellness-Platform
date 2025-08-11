@@ -34,7 +34,7 @@ const DashboardLayout = () => {
 			}
 		};
 		fetchUser();
-	}, [axiosSecure, navigate]);
+	}, []);
 
 	// Show greeting only on dashboard home (exact /dashboard path)
 	const showGreeting = location.pathname === "/dashboard";
