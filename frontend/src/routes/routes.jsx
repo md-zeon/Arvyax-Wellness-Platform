@@ -5,6 +5,8 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
+import MySessions from "../pages/Dashboard/MySessions";
+import SessionEditor from "../pages/Dashboard/SessionEditor";
 
 const router = createBrowserRouter([
 	{
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				Component: DashboardHome,
+			},
+			{
+				path: "my-sessions",
+				Component: MySessions,
+			},
+			{
+				path: "session-editor",
+				Component: SessionEditor,
 			},
 		],
 	},

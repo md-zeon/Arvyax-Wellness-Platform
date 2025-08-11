@@ -39,6 +39,7 @@ const DashBoardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 						to='/dashboard'
 						className={({ isActive }) => (isActive ? "btn btn-primary" : "hover:underline btn btn-ghost")}
 						onClick={() => setSidebarOpen(false)}
+						end
 					>
 						Home
 					</NavLink>
