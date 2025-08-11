@@ -280,6 +280,28 @@ async function run() {
 			}
 		});
 
+		// Delete a session by ID
+		app.delete("/my-sessions/:id", verifyJWT, async (req, res) => {
+			try {
+				const userId = req.user.userId;
+				const sessionId = req.params.id;
+
+				const result = await sessionsCollection.deleteOne({
+					_id: new ObjectId(sessionId),
+					user_id: new ObjectId(userId),
+				});
+
+				if (result.deletedCount === 0) {
+					return res.status(404).json({ message: "Session not found or you are not the owner" });
+				}
+
+				res.json({ message: "Session deleted successfully" });
+			} catch (err) {
+				console.error(err);
+				res.status(500).json({ message: "Failed to delete session" });
+			}
+		});
+
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
 		console.log("Pinged your deployment. You successfully connected to MongoDB!");

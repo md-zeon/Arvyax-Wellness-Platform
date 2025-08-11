@@ -10,7 +10,28 @@ body {
 	font-style: normal;
 }
 
-
 a.active {
 	@apply text-primary;
+}
+
+.custom-popup {
+	background-color: #fff0f0;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.custom-confirm {
+	@apply font-bold !bg-error !border-error !text-white;
+}
+
+.custom-cancel {
+	@apply !bg-primary border-primary !text-black;
+}
+
+.custom-title {
+	@apply !font-bold !text-2xl text-error;
+}
+
+.custom-content {
+	font-size: 1.1rem !important;
+	color: #4b5563;
 }
