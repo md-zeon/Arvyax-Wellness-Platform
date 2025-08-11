@@ -1,52 +1,39 @@
+import { FaBars } from "react-icons/fa6";
 import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
 	const navItems = (
 		<>
 			<li>
-				<NavLink to='/'>Home</NavLink>
+				<NavLink className="text-black font-medium hover:text-primary hover:bg-transparent" to='/'>Home</NavLink>
 			</li>
 			<li>
-				<NavLink to='/sessions'>Sessions</NavLink>
+				<NavLink className="text-black font-medium hover:text-primary hover:bg-transparent" to='/sessions'>Sessions</NavLink>
 			</li>
 		</>
 	);
 	return (
-		<nav className='navbar'>
+		<nav className='navbar px-0'>
 			<div className='navbar-start'>
 				{/* Dropdown Start */}
 				<div className='dropdown'>
 					<div
 						tabIndex={0}
 						role='button'
-						className='btn btn-ghost lg:hidden'
+						className='pr-2 lg:hidden cursor-pointer'
 					>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							className='h-5 w-5'
-							fill='none'
-							viewBox='0 0 24 24'
-							stroke='currentColor'
-						>
-							{" "}
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								strokeWidth='2'
-								d='M4 6h16M4 12h8m-8 6h16'
-							/>{" "}
-						</svg>
+						<FaBars className="text-primary" />
 					</div>
 					<ul
 						tabIndex={0}
-						className='menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow'
+						className='menu menu-sm dropdown-content bg-base-200 rounded-box mt-3 w-52 p-2 shadow'
 					>
 						{navItems}
 					</ul>
 				</div>
 				<Link
 					to='/'
-					className='text-xl uppercase font-bold'
+					className='sm:text-xl md:text-2xl lg:text-3xl uppercase font-bold'
 				>
 					<span className="text-primary">Arvya.x</span> Wellness
 				</Link>

@@ -6,7 +6,7 @@ import Footer from "../../components/shared/Footer";
 const RootLayout = () => {
 	return (
 		<>
-			<header className='backdrop-blur-sm bg-transparent fixed top-0 left-0 right-0'>
+			<header className='backdrop-blur-xl bg-transparent fixed top-0 left-0 right-0 z-50'>
 				<Container>
 					<Navbar />
 				</Container>
