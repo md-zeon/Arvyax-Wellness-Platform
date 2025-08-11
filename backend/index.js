@@ -139,6 +139,27 @@ async function run() {
 			}
 		});
 
+		// Get single session by ID
+		app.get("/my-sessions/:id", verifyJWT, async (req, res) => {
+			try {
+				const userId = req.user.userId;
+				const sessionId = req.params.id;
+
+				const session = await sessionsCollection.findOne({
+					_id: new ObjectId(sessionId),
+					user_id: new ObjectId(userId),
+				});
+
+				if (!session) {
+					return res.status(404).json({ message: "Session not found" });
+				}
+
+				res.json(session);
+			} catch (err) {
+				res.status(500).json({ message: "Failed to fetch session" });
+			}
+		});
+
 		// Save or update draft session
 		app.post("/my-sessions/save-draft", verifyJWT, async (req, res) => {
 			try {
@@ -179,7 +200,31 @@ async function run() {
 			}
 		});
 
+		// Publish a session
+		app.post("/my-sessions/publish", async (req, res) => {
+			try {
+				const userId = req.user.userId;
+				const { sessionId } = req.body;
 
+				if (!sessionId) {
+					return res.status(400).json({ message: "Session ID is required" });
+				}
+
+				// Update session status to published
+				const result = await sessionsCollection.updateOne(
+					{ _id: new ObjectId(sessionId), user_id: new ObjectId(userId) },
+					{ $set: { status: "published", updated_at: new Date() } },
+				);
+
+				if (result.matchedCount === 0) {
+					return res.status(404).json({ message: "Session not found or you are not the owner" });
+				}
+
+				res.json({ message: "Session published successfully" });
+			} catch (err) {
+				res.status(500).json({ message: "Failed to publish session" });
+			}
+		});
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
