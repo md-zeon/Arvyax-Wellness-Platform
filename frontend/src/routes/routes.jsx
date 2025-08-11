@@ -23,6 +23,10 @@ const router = createBrowserRouter([
 			},
 		],
 	},
+	{
+		path: "/dashboard",
+		// Component: DashboardLayout,
+	},
 ]);
 
 export default router;
