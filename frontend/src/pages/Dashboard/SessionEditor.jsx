@@ -51,22 +51,30 @@ const SessionEditor = () => {
 
 		try {
 			if (status === "draft") {
-				await axiosSecure.post("/my-sessions/save-draft", sessionData);
+				// Save or update draft
+				const res = await axiosSecure.post("/my-sessions/save-draft", sessionData);
+				if (!sessionId && res.data.sessionId) {
+					setSessionId(res.data.sessionId);
+				}
 				toast.success("Session saved as draft");
 			} else {
-				// For publish endpoint, just send sessionId
+				// Publish flow
 				if (!sessionId) {
-					// If no sessionId, save draft first to get one (optional improvement)
+					// Save draft first to get sessionId
 					const res = await axiosSecure.post("/my-sessions/save-draft", sessionData);
+					if (!res.data.sessionId) {
+						throw new Error("Failed to get session ID from draft save");
+					}
+					setSessionId(res.data.sessionId);
+					sessionData._id = res.data.sessionId;
 					toast.success("Session saved as draft before publishing");
-					// You can get sessionId from response if your backend returns it
 				}
-				await axiosSecure.post("/my-sessions/publish", { sessionId });
+				await axiosSecure.post("/my-sessions/publish", { sessionId: sessionId || sessionData._id });
 				toast.success("Session published");
 			}
 			navigate("/dashboard/my-sessions");
 		} catch (error) {
-			toast.error(error.response?.data?.message || "Failed to save session");
+			toast.error(error.response?.data?.message || error.message || "Failed to save session");
 		} finally {
 			setLoading(false);
 		}

@@ -139,6 +139,27 @@ async function run() {
 			}
 		});
 
+		// Get all public sessions (status: published)
+		app.get("/sessions", async (req, res) => {
+			try {
+				const sessions = await sessionsCollection.find({ status: "published" }).toArray();
+				res.json(sessions);
+			} catch (err) {
+				res.status(500).json({ message: "Failed to fetch sessions" });
+			}
+		});
+
+		// Get logged-in user's sessions (draft + published)
+		app.get("/my-sessions", verifyJWT, async (req, res) => {
+			try {
+				const userId = req.user.userId;
+				const sessions = await sessionsCollection.find({ user_id: new ObjectId(userId) }).toArray();
+				res.json(sessions);
+			} catch (err) {
+				res.status(500).json({ message: "Failed to fetch your sessions" });
+			}
+		});
+
 		// Get single session by ID
 		app.get("/my-sessions/:id", verifyJWT, async (req, res) => {
 			try {
@@ -201,7 +222,7 @@ async function run() {
 		});
 
 		// Publish a session
-		app.post("/my-sessions/publish", async (req, res) => {
+		app.post("/my-sessions/publish", verifyJWT, async (req, res) => {
 			try {
 				const userId = req.user.userId;
 				const { sessionId } = req.body;
