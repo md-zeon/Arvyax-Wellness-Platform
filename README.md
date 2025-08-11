@@ -4,7 +4,8 @@ This repository contains the full-stack implementation of the Arvyax Wellness Se
 
 ## Live Demo
 
-[Link to Live Demo](https://your-live-demo-link.com)
+**Frontend:** [https://arvyax-wellness.netlify.app/](https://arvyax-wellness.netlify.app/)
+**Backend:** [https://backend-six-nu-2sybeftbqy.vercel.app](https://backend-six-nu-2sybeftbqy.vercel.app)
 
 ## Folder Structure
 
@@ -120,6 +121,34 @@ This repository contains the full-stack implementation of the Arvyax Wellness Se
 *   JWT (JSON Web Tokens)
 *   bcryptjs
 
+## Database Schema
+
+### User
+
+```js
+{
+  _id: ObjectId,
+  email: String,
+  password_hash: String,
+  created_at: Date
+}
+```
+
+### Session
+
+```js
+{
+  _id: ObjectId,
+  user_id: ObjectId,
+  title: String,
+  tags: [String],
+  json_file_url: String,
+  status: "draft" | "published",
+  created_at: Date,
+  updated_at: Date
+}
+```
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -137,13 +166,12 @@ This repository contains the full-stack implementation of the Arvyax Wellness Se
     ```bash
     npm install
     ```
-3.  Create a `.env` file and add the following environment variables (see the Environment Variables section for more details):
+3.  Create a `.env` file by copying the example:
+    ```bash
+    cp .env.example .env
     ```
-    MONGODB_URI=your_mongodb_connection_string
-    JWT_SECRET=your_jwt_secret
-    PORT=5000
-    ```
-4.  Start the backend server:
+4.  Update the `.env` file with your environment variables (see the Environment Variables section for more details).
+5.  Start the backend server:
     ```bash
     npm start
     ```
@@ -158,7 +186,12 @@ This repository contains the full-stack implementation of the Arvyax Wellness Se
     ```bash
     npm install
     ```
-3.  Start the frontend development server:
+3.  Create a `.env.local` file by copying the example:
+    ```bash
+    cp .env.example .env.local
+    ```
+4.  Update the `.env.local` file with your environment variables (see the Environment Variables section for more details).
+5.  Start the frontend development server:
     ```bash
     npm run dev
     ```
@@ -200,10 +233,8 @@ To run this project, you will need to create a `.env` file in the `backend` dire
 *   `JWT_SECRET`: A secret key for signing JWT tokens.
 *   `PORT`: The port for the backend server to run on (defaults to 5000).
 
-## Contributing
+### Frontend Environment Variables
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue.
+To run the frontend, create a `.env.local` file in the `frontend` directory with the following variable:
 
-## License
-
-This project is licensed under the ISC License.
+*   `VITE_API_URL`: The URL of your backend API (e.g., `https://backend-six-nu-2sybeftbqy.vercel.app`).
