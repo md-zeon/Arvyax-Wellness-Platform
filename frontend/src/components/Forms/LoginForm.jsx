@@ -1,11 +1,34 @@
 import { useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		try {
+			const res = await axios.post("http://localhost:5000/login", {
+				email,
+				password,
+			});
+
+			toast.success(res.data.message);
+			localStorage.setItem("userId", res.data.userId);
+		} catch (error) {
+			toast.error(error.response?.data?.message || "Login failed");
+		}
+	};
+
 	return (
-		<form className='space-y-6'>
+		<form
+			className='space-y-6'
+			onSubmit={handleSubmit}
+		>
 			<div>
 				<label
 					htmlFor='email'
@@ -21,6 +44,8 @@ const LoginForm = () => {
 					required
 					placeholder='you@example.com'
 					className='input input-bordered w-full'
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
 				/>
 			</div>
 
@@ -39,6 +64,8 @@ const LoginForm = () => {
 					required
 					placeholder='Enter your password'
 					className='input input-bordered w-full pr-12'
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<button
 					type='button'
