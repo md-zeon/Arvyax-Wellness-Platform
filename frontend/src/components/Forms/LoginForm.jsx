@@ -2,11 +2,13 @@ import { useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const LoginForm = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -18,7 +20,11 @@ const LoginForm = () => {
 			});
 
 			toast.success(res.data.message);
+
 			localStorage.setItem("userId", res.data.userId);
+			localStorage.setItem("token", res.data.token);
+
+			navigate("/dashboard");
 		} catch (error) {
 			toast.error(error.response?.data?.message || "Login failed");
 		}

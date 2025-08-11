@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 const app = express();
 
 // Middleware
@@ -85,7 +85,16 @@ async function run() {
 					return res.status(400).json({ message: "Invalid email or password" });
 				}
 
-				res.json({ message: "Login successful", userId: user._id });
+				// Create JWT token
+				const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+				res.json({
+					message: "Login successful",
+					token,
+					userId: user._id,
+					name: user.name,
+					email: user.email,
+				});
 			} catch (error) {
 				console.error(error);
 				res.status(500).json({ message: "Server error" });
