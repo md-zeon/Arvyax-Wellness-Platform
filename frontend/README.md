@@ -1,12 +1,50 @@
-# React + Vite
+# Frontend - Arvyax Wellness Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory contains the React.js client application for the Arvyax Wellness Platform, built with Vite.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React.js**
+- **Vite** as a build tool
+- **React Router** for client-side routing
+- **Axios** for making API requests
+- **Tailwind CSS** for styling
+- **daisyUI** component library for Tailwind CSS
+- **React Hot Toast** for notifications
 
-## Expanding the ESLint configuration
+## Core Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+-   User registration and login forms.
+-   JWT handling for authenticated API requests.
+-   Protected routes for the user dashboard.
+-   A dashboard to view public and user-owned wellness sessions.
+-   A session editor to create and update sessions.
+-   Auto-saving drafts after 5 seconds of inactivity.
+-   Logout functionality.
+
+---
+
+## Setup and Running
+
+### Prerequisites
+
+-   Node.js and npm installed.
+-   The [backend server](..\backend) must be running for the API requests to work.
+
+### Instructions
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    The frontend application will be available at `http://localhost:5173` (or another port if 5173 is busy).
