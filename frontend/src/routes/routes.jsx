@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 				path: "/sessions",
 				Component: Sessions,
 				loader: async () => {
-					const res = await axios.get("http://localhost:5000/sessions");
+					const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/sessions`);
 					return res.data;
 				},
 			},
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 				path: "/sessions/:id",
 				Component: SessionDetails,
 				loader: async ({ params }) => {
-					const res = await axios.get(`http://localhost:5000/sessions/${params.id}`);
+					const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/sessions/${params.id}`);
 					return res.data;
 				},
 			},
