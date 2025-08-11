@@ -53,6 +53,7 @@ async function run() {
 		await client.connect();
 		const database = client.db("arvyaxDB");
 		const usersCollection = database.collection("users");
+		const sessionsCollection = database.collection("sessions");
 
 		// Register User
 		app.post("/register", async (req, res) => {
@@ -137,6 +138,48 @@ async function run() {
 				res.status(500).json({ message: "Server error" });
 			}
 		});
+
+		// Save or update draft session
+		app.post("/my-sessions/save-draft", verifyJWT, async (req, res) => {
+			try {
+				const userId = req.user.userId;
+				const { _id, title, tags, json_file_url } = req.body;
+
+				if (!title) {
+					return res.status(400).json({ message: "Title is required" });
+				}
+
+				const sessionData = {
+					user_id: new ObjectId(userId),
+					title,
+					tags,
+					json_file_url,
+					status: "draft",
+					updated_at: new Date(),
+				};
+
+				if (_id) {
+					// Update existing draft
+					const filter = { _id: new ObjectId(_id), user_id: new ObjectId(userId) };
+					const result = await sessionsCollection.updateOne(filter, { $set: sessionData });
+
+					if (result.matchedCount === 0) {
+						return res.status(404).json({ message: "Session not found" });
+					}
+
+					res.json({ message: "Draft updated successfully" });
+				} else {
+					// Insert new draft
+					sessionData.created_at = new Date();
+					const result = await sessionsCollection.insertOne(sessionData);
+					res.json({ message: "Draft saved successfully", sessionId: result.insertedId });
+				}
+			} catch (err) {
+				res.status(500).json({ message: "Failed to save draft" });
+			}
+		});
+
+
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
